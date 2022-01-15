@@ -25,13 +25,13 @@ jobs:
         sudo pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html
     
     - name: Install TorchRec
-      run: python setup.py build develop --skip_fbgemm
+      run: sudo python setup.py build develop --skip_fbgemm
       
     - name: Test Installation
       run: |
         pip install torchx-nightly
-        torchx run --scheduler local_cwd test_installation.py:test_installation
+        sudo torchx run --scheduler local_cwd test_installation.py:test_installation
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
+        sudo pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
