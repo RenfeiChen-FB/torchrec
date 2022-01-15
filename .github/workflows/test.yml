@@ -46,7 +46,6 @@ jobs:
     - name: Checkout submodules
       shell: bash
       run: |
-        ls
         cd third_party/fbgemm/
         ls
 
