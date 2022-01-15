@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Python package
 
 on:
@@ -18,42 +15,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-#     - name: Install CUDA 11.3
-#       shell: bash
-#       run: |
-#         wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-#         sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-#         sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
-#         sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
-#         sudo apt-get update
-#         sudo apt-get -y install cuda-minimal-build-11-3 cuda-nvrtc-dev-11-3 cuda-nvtx-11-3 cuda-libraries-dev-11-3
-#         sudo apt-get -y install libcudnn8-dev
-
-#     - name: Install dependencies
-#       shell: bash
-#       run: |
-#         sudo apt-get update
-#         sudo apt-get -y install git pip python3-dev
-#         sudo pip install cmake scikit-build ninja jinja2 --no-input
-#         # Install pytorch 1.11 as required by fbgemm_gpu
-#         sudo pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html
-        
-#     - name: Install FBGEMM_GPU
-#       run: |
-#         git clone --recursive https://github.com/pytorch/FBGEMM.git
-        
-    - name: Checkout submodules
+    - name: Install dependencies
       shell: bash
       run: |
-        cd third_party/fbgemm/
-        ls
-
-#     - name: Build fbgemm_gpu
-#       shell: bash
-#       run: |
-#         cd FBGEMM
-#         cd fbgemm_gpu
-#         export CUDACXX=/usr/local/cuda-11.3/bin/nvcc
-#         TORCH_CUDA_ARCH_LIST="6.0" python setup.py build
-
+        sudo apt-get update
+        sudo apt-get -y install git pip python3-dev
+        sudo pip install cmake scikit-build ninja jinja2 --no-input
+        # Install pytorch 1.11 as required by fbgemm_gpu
+        sudo pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html
+    
+    - name: Install TorchRec
+      run: python setup.py build develop --skip_fbgemm
+      
+    - name: Test Installation
+      run: |
+        pip install torchx-nightly
+        torchx run --scheduler local_cwd test_installation.py:test_installation
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
