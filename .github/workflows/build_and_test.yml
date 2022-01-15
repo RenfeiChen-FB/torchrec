@@ -53,7 +53,6 @@ jobs:
         cd fbgemm_gpu
         git submodule sync
         git submodule update --init --recursive
-
     - name: Build fbgemm_gpu
       shell: bash
       run: |
