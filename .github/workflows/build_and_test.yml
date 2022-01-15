@@ -67,9 +67,9 @@ jobs:
     - name: Test Installation
       run: |
         pip install torchx-nightly
-        sudo torchx run --scheduler local_cwd test_installation.py:test_installation
+        torchx run --scheduler local_cwd test_installation.py:test_installation
     - name: Test with pytest
       run: |
         pip install pytest
-        sudo pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
+        pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
 
