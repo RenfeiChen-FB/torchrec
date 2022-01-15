@@ -62,14 +62,14 @@ jobs:
         TORCH_CUDA_ARCH_LIST="7.0;8.0" python setup.py build
     
     - name: Install TorchRec
-      run: python setup.py build develop --skip_fbgemm
+      run: sudo python setup.py build develop --skip_fbgemm
       
     - name: Test Installation
       run: |
         pip install torchx-nightly
-        torchx run --scheduler local_cwd test_installation.py:test_installation
+        sudo torchx run --scheduler local_cwd test_installation.py:test_installation
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
+        sudo pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
 
