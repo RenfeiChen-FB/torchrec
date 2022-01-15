@@ -42,6 +42,9 @@ jobs:
     - name: Install FBGEMM_GPU
       run: |
         git clone --recursive https://github.com/pytorch/FBGEMM.git
+        cd FBGEMM/
+        git fetch origin pull/862/head:BRANCHNAME
+        git checkout BRANCHNAME
         
     - name: Checkout submodules
       shell: bash
@@ -57,7 +60,7 @@ jobs:
         cd FBGEMM
         cd fbgemm_gpu
         export CUDACXX=/usr/local/cuda-11.3/bin/nvcc
-        TORCH_CUDA_ARCH_LIST="6.0" python setup.py build
+        TORCH_CUDA_ARCH_LIST="7.0;8.0" python setup.py build
     
     - name: Install TorchRec
       run: python setup.py build develop --skip_fbgemm
