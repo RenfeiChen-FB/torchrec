@@ -46,10 +46,9 @@ jobs:
     - name: Checkout submodules
       shell: bash
       run: |
+        ls
         cd third_party/fbgemm/
-        cd fbgemm_gpu
-        git submodule sync
-        git submodule update --init --recursive
+        ls
 
 #     - name: Build fbgemm_gpu
 #       shell: bash
