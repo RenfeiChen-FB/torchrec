@@ -58,4 +58,16 @@ jobs:
         cd fbgemm_gpu
         export CUDACXX=/usr/local/cuda-11.3/bin/nvcc
         TORCH_CUDA_ARCH_LIST="6.0" python setup.py build
+    
+    - name: Install TorchRec
+      run: python setup.py build develop --skip_fbgemm
+      
+    - name: Test Installation
+      run: |
+        pip install torchx-nightly
+        torchx run --scheduler local_cwd test_installation.py:test_installation
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
 
