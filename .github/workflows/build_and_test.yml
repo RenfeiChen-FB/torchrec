@@ -1,4 +1,16 @@
-build_gpu:
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_gpu:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -46,3 +58,4 @@ build_gpu:
         cd fbgemm_gpu
         export CUDACXX=/usr/local/cuda-11.3/bin/nvcc
         TORCH_CUDA_ARCH_LIST="6.0" python setup.py build
+
