@@ -43,7 +43,7 @@ jobs:
       run: |
         git clone --recursive https://github.com/pytorch/FBGEMM.git
         cd FBGEMM/
-        git fetch origin pull/862/head:BRANCHNAME
+        git fetch origin pull/870/head:BRANCHNAME
         git checkout BRANCHNAME
         
     - name: Checkout submodules
