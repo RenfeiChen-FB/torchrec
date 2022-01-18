@@ -59,8 +59,7 @@ jobs:
       run: |
         cd FBGEMM
         cd fbgemm_gpu
-        export CUDACXX=/usr/local/cuda-11.3/bin/nvcc
-        sudo TORCH_CUDA_ARCH_LIST="7.0" python setup.py install
+        sudo CUDACXX=/usr/local/cuda-11.3/bin/nvcc TORCH_CUDA_ARCH_LIST="7.0" python setup.py install
         
     - name: Test fbgemm_gpu installation correctly
       shell: bash
