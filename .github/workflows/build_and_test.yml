@@ -53,13 +53,22 @@ jobs:
         cd fbgemm_gpu
         git submodule sync
         git submodule update --init --recursive
+        
     - name: Build fbgemm_gpu
       shell: bash
       run: |
         cd FBGEMM
         cd fbgemm_gpu
         export CUDACXX=/usr/local/cuda-11.3/bin/nvcc
-        TORCH_CUDA_ARCH_LIST="7.0;8.0" python setup.py build
+        TORCH_CUDA_ARCH_LIST="7.0" sudo python setup.py install
+        
+    - name: Test fbgemm_gpu installation correctly
+      shell: bash
+      run: |
+        cd FBGEMM
+        cd fbgemm_gpu
+        cd bench
+        python split_table_batched_embeddings_benchmark.py uvm
     
     - name: Install TorchRec
       run: sudo python setup.py build develop --skip_fbgemm
