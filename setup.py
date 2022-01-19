@@ -18,7 +18,7 @@ else:
     print("Installing fbgemm_gpu")
     torchrec_dir = os.getcwd()
     os.chdir("third_party/fbgemm/fbgemm_gpu/")
-    os.system('sudo CUDACXX=/usr/local/cuda-11.3/bin/nvcc TORCH_CUDA_ARCH_LIST="7.0" python setup.py install')
+    os.system('sudo CUDACXX=/usr/local/cuda-11.3/bin/nvcc TORCH_CUDA_ARCH_LIST="7.0;8.0" python setup.py install')
 #     os.system("python setup.py build develop")
     os.chdir(torchrec_dir)
 
