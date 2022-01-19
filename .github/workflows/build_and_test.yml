@@ -17,8 +17,18 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: true
 
+    # Update references
+    - name: Git Sumbodule Update
+      run: |
+        git pull --recurse-submodules
+        git submodule update --remote --recursive
+    
     - name: Install CUDA 11.3
       shell: bash
       run: |
