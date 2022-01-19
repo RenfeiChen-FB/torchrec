@@ -79,8 +79,8 @@ jobs:
 #         cd bench
 #         python split_table_batched_embeddings_benchmark.py uvm
     
-    - name: Install TorchRec
-      run: sudo python setup.py build develop
+#     - name: Install TorchRec
+#       run: sudo python setup.py build develop
       
 #     - name: Test Installation
 #       run: |
