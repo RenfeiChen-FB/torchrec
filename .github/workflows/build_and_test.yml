@@ -39,45 +39,67 @@ jobs:
         # Install pytorch 1.11 as required by fbgemm_gpu
         sudo pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html
         
-    - name: Install FBGEMM_GPU
-      run: |
-        git clone --recursive https://github.com/pytorch/FBGEMM.git
-        cd FBGEMM/
-        git fetch origin pull/872/head:BRANCHNAME
-        git checkout BRANCHNAME
+#     - name: Install FBGEMM_GPU
+#       run: |
+#         git clone --recursive https://github.com/pytorch/FBGEMM.git
+#         cd FBGEMM/
+#         git fetch origin pull/872/head:BRANCHNAME
+#         git checkout BRANCHNAME
         
-    - name: Checkout submodules
-      shell: bash
-      run: |
-        cd FBGEMM
-        cd fbgemm_gpu
-        git submodule sync
-        git submodule update --init --recursive
+#     - name: Checkout submodules
+#       shell: bash
+#       run: |
+#         cd FBGEMM
+#         cd fbgemm_gpu
+#         git submodule sync
+#         git submodule update --init --recursive
         
-    - name: Build fbgemm_gpu
-      shell: bash
-      run: |
-        cd FBGEMM
-        cd fbgemm_gpu
-        sudo CUDACXX=/usr/local/cuda-11.3/bin/nvcc TORCH_CUDA_ARCH_LIST="7.0" python setup.py install
+#     - name: Build fbgemm_gpu
+#       shell: bash
+#       run: |
+#         cd FBGEMM
+#         cd fbgemm_gpu
+#         sudo CUDACXX=/usr/local/cuda-11.3/bin/nvcc TORCH_CUDA_ARCH_LIST="7.0" python setup.py install
         
-    - name: Test fbgemm_gpu installation correctly
-      shell: bash
-      run: |
-        cd FBGEMM
-        cd fbgemm_gpu
-        cd bench
-        python split_table_batched_embeddings_benchmark.py uvm
+#     - name: Test fbgemm_gpu installation correctly
+#       shell: bash
+#       run: |
+#         cd FBGEMM
+#         cd fbgemm_gpu
+#         cd bench
+#         python split_table_batched_embeddings_benchmark.py uvm
     
     - name: Install TorchRec
-      run: sudo python setup.py build develop --skip_fbgemm
+      run: sudo python setup.py build develop
       
-    - name: Test Installation
+#     - name: Test Installation
+#       run: |
+#         pip install torchx-nightly
+#         torchx run --scheduler local_cwd test_installation.py:test_installation
+#     - name: Test with pytest
+#       run: |
+#         pip install pytest
+#         pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
+    
+    - name: Install Push Depencenies
       run: |
-        pip install torchx-nightly
-        torchx run --scheduler local_cwd test_installation.py:test_installation
-    - name: Test with pytest
+        set -eux
+        pip install twine
+        pip install wheel
+      
+    - name: Push nightly
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       run: |
-        pip install pytest
-        pytest -s -v -W ignore::pytest.PytestCollectionWarning --continue-on-collection-errors
+        set -ex
+        rm -r dist || true
+        python setup.py --override-name torchrec-nightly bdist_wheel
+        if [ -z "$PYPI_TOKEN" ]; then
+            echo "must specify PYPI_TOKEN"
+            exit 1
+        fi
+        python3 -m twine upload \
+            --username __token__ \
+            --password "$PYPI_TOKEN" \
+            dist/torchx_nightly-*
 
