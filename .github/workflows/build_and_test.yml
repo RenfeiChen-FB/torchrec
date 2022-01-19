@@ -97,13 +97,13 @@ jobs:
         pip install twine
         pip install wheel
       
-    - name: Push nightly
+    - name: Push Binary
       env:
         PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       run: |
         set -ex
         rm -r dist || true
-        python setup.py --override-name torchrec-nightly bdist_wheel
+        sudo python setup.py bdist_wheel
         if [ -z "$PYPI_TOKEN" ]; then
             echo "must specify PYPI_TOKEN"
             exit 1
@@ -111,5 +111,5 @@ jobs:
         python3 -m twine upload \
             --username __token__ \
             --password "$PYPI_TOKEN" \
-            dist/torchx_nightly-*
+            dist/torchrec-*
 
