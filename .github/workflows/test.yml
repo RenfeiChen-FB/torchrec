@@ -28,8 +28,6 @@ jobs:
 #         sudo pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu113/torch_nightly.html
     - name: check third_party
       run: |
-        cd third_paty
-        cd fbgemm
         ls
     
     - name: Install TorchRec
