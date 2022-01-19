@@ -69,10 +69,10 @@ jobs:
       run: sudo python setup.py build develop --skip_fbgemm
     
     - name: Install Push Depencenies
-        run: |
-          set -eux
-          pip install twine
-          pip install wheel
+      run: |
+        set -eux
+        pip install twine
+        pip install wheel
       
     - name: Push nightly
       env:
